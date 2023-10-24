@@ -9,9 +9,9 @@ Post http://localhost:3003/videos
 Content-Type: application/json 
 
 {
-    "id": "v001",
-    "titulo": "Exercicio POO I",
-    "duracao": 60 
+    "id": "v002",
+    "titulo": "Exercicio POO II",
+    "duracao": 160 
 }
 ###
 
@@ -19,9 +19,8 @@ Put http://localhost:3003/videos/v001
 Content-Type: application/json 
 
 {
-    "newId": "v001",
     "newTitulo": "Exercicio POO I",
-    "newDuracao": 260 
+    "newDuracao": 160 
 }
 ###
 

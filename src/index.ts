@@ -130,35 +130,44 @@ app.put("/videos/:id", async (req: Request, res: Response) => {
         const newTitulo = req.body.newTitulo as string
         const newDuracao = req.body.newDuracao as number
 
-        const [idExists] = await db("videos").where({ id: idToEdit })
-
-        if(!idExists){
+        const [videoDB] = await db("videos").where({ id: idToEdit })
+        
+        if(!videoDB){
             res.status(400)
             throw new Error("'id' não existe")
         }
 
-        if (typeof newId !== "string") {
-            res.status(400)
-            throw new Error("'newId' deve ser string")
-        }
-
-        if (typeof newTitulo !== "string") {
-            res.status(400)
-            throw new Error("'newTitulo' deve ser string")
-        }
-
-        if (typeof newDuracao !== "number") {
-            res.status(400)
-            throw new Error("'newDuracao' deve ser number")
-        }
-
-
         const video = new Videos (
-            newId,
-            newTitulo,
-            newDuracao,
-            new Date().toISOString()
+            videoDB.id,
+            videoDB.titulo,
+            videoDB.duracao,
+            videoDB.data_upload
         )
+        
+        if(newId !== undefined){
+            if (typeof newId !== "string") {
+                res.status(400)
+                throw new Error("'newId' deve ser string")
+            }
+        }
+        
+        if(newTitulo !== undefined){
+            if (typeof newTitulo !== "string") {
+                res.status(400)
+                throw new Error("'newTitulo' deve ser string")
+            }
+        }
+        
+        if(newDuracao !== undefined){
+            if (typeof newDuracao !== "number") {
+                res.status(400)
+                throw new Error("'newDuracao' deve ser number")
+            }
+        }
+        
+        newId && video.setId(newId)
+        newTitulo && video.setTitulo(newTitulo)
+        newDuracao && video.setDuracao(newDuracao)
 
         const newVideo: TVideos = {
             id: video.getId(),
@@ -191,14 +200,21 @@ app.delete("/videos/:id", async (req: Request, res: Response) => {
 
         const idToDelete = req.params.id
 
-        const [idExists] = await db("videos").where({ id: idToDelete })
+        const [videoDB] = await db("videos").where({ id: idToDelete })
 
-        if(!idExists){
+        if(!videoDB){
             res.status(400)
             throw new Error("'id' não existe")
         }
 
-        await db('videos').delete().where({id: idToDelete})
+        const video = new Videos (
+            videoDB.id,
+            videoDB.titulo,
+            videoDB.duracao,
+            videoDB.data_upload
+        )
+
+        await db('videos').delete().where({id: video.getId()})
         
         res.status(200).send({message: "Video deletado com sucesso"})
 
