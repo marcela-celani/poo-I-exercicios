@@ -1,0 +1,29 @@
+
+Get http://localhost:3003/ping
+###
+
+Get http://localhost:3003/videos
+###
+
+Post http://localhost:3003/videos
+Content-Type: application/json 
+
+{
+    "id": "v001",
+    "titulo": "Exercicio POO I",
+    "duracao": 60 
+}
+###
+
+Put http://localhost:3003/videos/v001
+Content-Type: application/json 
+
+{
+    "newId": "v001",
+    "newTitulo": "Exercicio POO I",
+    "newDuracao": 260 
+}
+###
+
+Delete http://localhost:3003/videos/v001
+###
